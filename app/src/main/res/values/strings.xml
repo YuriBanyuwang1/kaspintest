@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Kaspintest</string>
+
+    <string name="nav_product">Produk</string>
+    <string name="nav_history">Riwayat</string>
+    <string name="nav_queue">Queue</string>
+
+    <string name="stock_label">Stok: %1$d</string>
+    <string name="price_label">Rp%1$,d</string>
+    <string name="buy_action">Buat Transaksi</string>
+
+    <string name="dialog_title_create_tx">Buat Transaksi</string>
+    <string name="dialog_qty_hint">Jumlah</string>
+    <string name="dialog_confirm">Simpan</string>
+    <string name="dialog_cancel">Batal</string>
+    <string name="error_insufficient_stock">Stok tidak cukup</string>
+
+    <string name="status_pending">PENDING</string>
+    <string name="status_synced">SYNCED</string>
+    <string name="status_failed">FAILED</string>
+
+    <string name="queue_force_fail_label">Simulasikan gagal jaringan (mock API)</string>
+    <string name="queue_retry_action">Retry</string>
+    <string name="queue_empty">Queue kosong — semua transaksi sudah tersinkron</string>
+    <string name="queue_retry_count">Percobaan ke-%1$d</string>
+</resources>
