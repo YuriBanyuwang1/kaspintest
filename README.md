@@ -23,6 +23,7 @@ Retrofit ApiService ──▶ MockApiServer (OkHttp MockWebServer, in-process, l
 - **Stock decrement, insert Transaction, dan insert Outbox terjadi dalam satu `Room.runInTransaction`.** Kalau proses mati di tengah jalan, tidak ada state setengah-jadi (stok berkurang tapi transaksi tidak tercatat, atau sebaliknya).
 - **txId adalah UUID yang di-generate di client**, dipakai sebagai primary key lokal *dan* idempotency key yang dikirim ke API. `MockApiServer` men-dedupe berdasarkan txId ini — request yang sama yang terkirim dua kali (misal karena retry setelah response hilang) tidak diproses dobel di sisi server.
 - **MockWebServer jalan in-process di localhost**, bukan server sungguhan. Ini penting untuk demo airplane mode: loopback (127.0.0.1) biasanya tetap jalan meski airplane mode aktif, jadi yang benar-benar memblokir sync bukan MockWebServer-nya, melainkan **WorkManager `NetworkType.CONNECTED` constraint** — itu yang dicek terhadap kondisi jaringan asli perangkat (lihat `SyncScheduler`).
+- **`network_security_config.xml` mengizinkan cleartext HTTP khusus ke `localhost`/`127.0.0.1`.** Ketauan pas verifikasi live di emulator: Android API 28+ men-default-block cleartext traffic secara total, termasuk ke loopback — bukan cuma ke domain eksternal. Tanpa ini, semua panggilan ke MockApiServer gagal dengan `CLEARTEXT communication to localhost not permitted`, dan karena `SyncWorker` menangkap `IOException` lalu menyimpannya sebagai `lastError` (bukan silent-swallow), errornya langsung kelihatan jelas di layar Queue — persis skenario "ketauan dari monitoring, bukan dari laporan user" yang dibahas di Kasus 1 Task 3.
 - **SyncWorker menyapu ulang seluruh outbox tiap kali jalan** (bukan cuma item yang memicunya), supaya beberapa transaksi yang dibuat saat offline ikut ter-sync sekaligus begitu online.
 - **Retry policy:** gagal → `retryCount++`, status tetap `PENDING` dan Worker return `Result.retry()` (WorkManager yang atur exponential backoff), sampai `retryCount >= 5` baru status jadi `FAILED` (butuh retry manual dari Queue screen).
 
@@ -80,6 +81,7 @@ Login/multi-user, printer, QRIS, multi-cabang, conflict-merge server yang canggi
 |---|---|---|
 | Scaffold Gradle / Room schema | Ya | Nama tabel & kolom, index unique pada `txId`, keputusan pisah Outbox dari Transaction |
 | Sync worker (WorkManager) | Ya | Aturan retry (max 5 percobaan → FAILED), constraint jaringan, race `apiService` null saat startup |
+| Verifikasi live di emulator | Manual | Jalanin 5 flow di Android emulator sungguhan (bukan cuma unit test) — nemuin bug nyata: cleartext HTTP ke localhost diblokir default oleh Android API 28+, di-fix dengan `network_security_config.xml` |
 | Mock API server | Ya | Logika dedupe idempotency, response code untuk force-fail toggle |
 | Unit test | Ya | Skenario yang dipilih (stok, outbox, idempotency, retry) berdasarkan risiko nyata yang pernah saya temui, bukan template generik |
 | README / dokumentasi | Ya | Fakta arsitektur & keputusan disesuaikan dengan yang benar-benar diimplementasikan |

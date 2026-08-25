@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <!--
+      Only localhost is exempted from the default cleartext-traffic block
+      (targetSdk 28+ disallows plain HTTP everywhere else). This app never
+      talks to a real backend — the in-process MockApiServer IS the backend,
+      so this is not a general cleartext bypass.
+    -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+    </domain-config>
+</network-security-config>
