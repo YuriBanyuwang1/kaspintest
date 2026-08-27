@@ -10,8 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.kasirpintar.kaspintest.data.local.entity.ProductEntity;
 import com.kasirpintar.kaspintest.databinding.ItemProductBinding;
-
-import java.util.Locale;
+import com.kasirpintar.kaspintest.util.Formats;
 
 public class ProductAdapter extends ListAdapter<ProductEntity, ProductAdapter.ProductViewHolder> {
 
@@ -63,8 +62,8 @@ public class ProductAdapter extends ListAdapter<ProductEntity, ProductAdapter.Pr
 
         void bind(ProductEntity product, OnBuyClickListener listener) {
             binding.textName.setText(product.name);
-            binding.textStock.setText(String.format(Locale.getDefault(), "Stok: %d", product.stock));
-            binding.textPrice.setText(String.format(Locale.getDefault(), "Rp%,d", product.price));
+            binding.textStock.setText(Formats.stock(product.stock));
+            binding.textPrice.setText(Formats.rupiah(product.price));
             binding.buttonBuy.setEnabled(product.stock > 0);
             binding.buttonBuy.setOnClickListener(v -> listener.onBuyClick(product));
         }

@@ -34,7 +34,10 @@ public class HistoryFragment extends Fragment {
         binding.recyclerHistory.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerHistory.setAdapter(adapter);
 
-        viewModel.getTransactions().observe(getViewLifecycleOwner(), adapter::submitList);
+        viewModel.getTransactions().observe(getViewLifecycleOwner(), transactions -> {
+            adapter.submitList(transactions);
+            binding.textEmpty.setVisibility(transactions.isEmpty() ? View.VISIBLE : View.GONE);
+        });
     }
 
     @Override

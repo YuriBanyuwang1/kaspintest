@@ -12,8 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.kasirpintar.kaspintest.R;
 import com.kasirpintar.kaspintest.data.local.entity.TransactionEntity;
 import com.kasirpintar.kaspintest.databinding.ItemTransactionBinding;
-
-import java.util.Locale;
+import com.kasirpintar.kaspintest.util.Formats;
 
 public class TransactionAdapter extends ListAdapter<TransactionEntity, TransactionAdapter.TxViewHolder> {
 
@@ -56,7 +55,8 @@ public class TransactionAdapter extends ListAdapter<TransactionEntity, Transacti
 
         void bind(TransactionEntity tx) {
             binding.textProductName.setText(tx.productName);
-            binding.textDetail.setText(String.format(Locale.getDefault(), "%dx — Rp%,d", tx.qty, tx.totalPrice));
+            binding.textDetail.setText(Formats.quantity(tx.qty) + " — " + Formats.rupiah(tx.totalPrice));
+            binding.textTime.setText(Formats.dateTime(tx.createdAt));
             binding.textStatus.setText(tx.status.name());
 
             int colorRes;
