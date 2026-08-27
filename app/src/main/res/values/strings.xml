@@ -23,5 +23,6 @@
     <string name="queue_force_fail_label">Simulasikan gagal jaringan (mock API)</string>
     <string name="queue_retry_action">Retry</string>
     <string name="queue_empty">Queue kosong — semua transaksi sudah tersinkron</string>
+    <string name="history_empty">Belum ada transaksi.\nBuat transaksi pertama dari tab Produk.</string>
     <string name="queue_retry_count">Percobaan ke-%1$d</string>
 </resources>
